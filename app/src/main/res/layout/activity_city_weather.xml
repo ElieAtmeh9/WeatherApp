@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1E1E1E">
+
+    <!-- City and Temperature Card -->
+    <LinearLayout
+        android:id="@+id/cityCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/card_background"
+        android:layout_centerHorizontal="true"
+        android:elevation="8dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center">
+
+        <!-- City Name -->
+        <TextView
+            android:id="@+id/cityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/city_name"
+            android:textSize="28sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center" />
+
+        <!-- Temperature -->
+        <TextView
+            android:id="@+id/temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/temperature"
+            android:textSize="52sp"
+            android:textColor="#FFC107"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-light" />
+
+        <!-- Weather Description -->
+        <TextView
+            android:id="@+id/weatherDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/weather_description"
+            android:textSize="20sp"
+            android:textColor="#A0A0A0"
+            android:fontFamily="sans-serif"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <!-- Weather Details Card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cityCard"
+        android:layout_marginTop="16dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/card_background"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center"
+        android:baselineAligned="false">
+
+        <!-- Humidity Section -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_humidity"
+                android:tint="#FFC107"
+                android:contentDescription="@string/humidity_icon_desc" />
+
+            <TextView
+                android:id="@+id/humidityLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/humidity"
+                android:textColor="#A0A0A0"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/humidityValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/humidity_value"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-light" />
+        </LinearLayout>
+
+        <!-- Wind Speed Section -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_wind"
+                android:tint="#FFC107"
+                android:contentDescription="@string/wind_icon_desc" />
+
+            <TextView
+                android:id="@+id/windSpeedLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/wind_speed"
+                android:textColor="#A0A0A0"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/windSpeedValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wind_speed_value"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-light" />
+        </LinearLayout>
+
+        <!-- Pressure Section -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_pressure"
+                android:tint="#FFC107"
+                android:contentDescription="@string/pressure_icon_desc" />
+
+            <TextView
+                android:id="@+id/pressureLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/pressure"
+                android:textColor="#A0A0A0"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/pressureValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pressure_value"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-light" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

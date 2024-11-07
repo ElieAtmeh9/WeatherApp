@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">MIDTERM_PROJ</string>
+    <string name="city_name">City Name</string>
+    <string name="temperature">25°C</string>
+    <string name="weather_description">Sunny</string>
+    <string name="humidity">Humidity</string>
+    <string name="humidity_value">60%</string>
+    <string name="pressure">Pressure</string>
+    <string name="pressure_value">1013 hPa</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="wind_speed_value">15 km/h</string>
+    <!-- Content descriptions for accessibility -->
+    <string name="humidity_icon_desc">Humidity icon</string>
+    <string name="wind_icon_desc">Wind speed icon</string>
+    <string name="pressure_icon_desc">Pressure icon</string>
+</resources>
