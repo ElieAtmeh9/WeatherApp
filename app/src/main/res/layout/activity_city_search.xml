@@ -1,85 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00796B">
+    android:background="#1E1E1E">
 
-    <!-- Title -->
-    <TextView
-        android:id="@+id/searchTitle"
-        android:layout_width="wrap_content"
+    <!-- Search Section -->
+    <LinearLayout
+        android:id="@+id/searchSection"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_margin="16dp"
+        android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        android:text="Search for a City"
-        android:textSize="28sp"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-medium" />
+        android:gravity="center">
 
-    <!-- Search Box -->
-    <EditText
-        android:id="@+id/citySearchBox"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/searchTitle"
-        android:layout_centerHorizontal="true"
+
+        <!-- Search Box -->
+        <EditText
+            android:id="@+id/citySearchBox"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:hint="Enter city name"
+            android:padding="12dp"
+            android:backgroundTint="@color/white"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"/>
+
+        <!-- Search Button -->
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:text="Search"
+            android:textSize="15sp"
+            android:backgroundTint="#8A2BE2 "
+            android:textColor="#008080"
+            android:padding="12dp"
+            android:elevation="4dp" />
+    </LinearLayout>
+
+    <!-- City and Temperature Card (Searched City) -->
+
+    <!-- Current Location Weather Details Card -->
+
+    <LinearLayout
+        android:id="@+id/cityCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchSection"
+        android:layout_margin="15dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/card_background"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- City Name -->
+
+        <!-- Temperature -->
+        <TextView
+            android:id="@+id/cityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="City Name"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/temperature"
+            android:textColor="#008080"
+            android:textSize="45sp"
+            android:textStyle="bold" />
+
+        <!-- Weather Description -->
+        <TextView
+            android:id="@+id/weatherDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="@string/weather_description"
+            android:textColor="#A0A0A0"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/currentLocationLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cityCard"
+        android:layout_margin="16dp"
+        android:background="@drawable/card_background"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:gravity="center"
+        android:elevation="8dp">
+
+        <!-- Current Location Title -->
+        <TextView
+            android:id="@+id/currentLocationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Location Weather"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <!-- Display Location Details -->
+        <TextView
+            android:id="@+id/currentCityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="City: --"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/currentTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Temperature: -- °C"
+            android:textColor="#008080"
+            android:textSize="20sp"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/currentWeatherDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description: --"
+            android:textColor="#A0A0A0"
+            android:textSize="18sp"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- Favorites Section -->
+    <LinearLayout
+        android:id="@+id/favoritesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/currentLocationLayout"
+        android:layout_margin="26dp"
         android:layout_marginTop="24dp"
-        android:hint="Enter city name"
-        android:padding="12dp"
-        android:backgroundTint="@color/white"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"/>
+        android:layout_marginBottom="26dp"
+        android:background="@drawable/card_background"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <!-- Search Button -->
-    <Button
-        android:id="@+id/searchButton"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/citySearchBox"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:text="Search"
-        android:textSize="18sp"
-        android:backgroundTint="#FFC107"
-        android:textColor="#FFFFFF"
-        android:padding="12dp"
-        android:elevation="4dp" />
+        <!-- Favorites Title -->
+        <TextView
+            android:id="@+id/favoritesTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="Favorite Cities"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <!-- Results Section -->
-    <TextView
-        android:id="@+id/resultCityName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/searchButton"
-        android:layout_marginTop="32dp"
-        android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        <!-- Display Favorite Cities -->
+        <TextView
+            android:id="@+id/favoriteCitiesText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="No favorites yet"
+            android:textColor="#A0A0A0"
+            android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/resultTemperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/resultCityName"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:visibility="gone" />
+        <!-- Add Favorite Button -->
+        <Button
+            android:id="@+id/addFavoriteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#90EE90
+"
+            android:elevation="10dp"
+            android:padding="10dp"
+            android:text="Add to Favorites"
+            android:textColor="#008080"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/resultDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/resultTemperature"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true"
-        android:textColor="#A0A0A0"
-        android:textSize="18sp"
-        android:visibility="gone" />
+        <!-- Remove Favorite Button -->
+        <Button
+            android:id="@+id/removeFavoriteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="#FF5722"
+            android:elevation="10dp"
+            android:padding="12dp"
+            android:text="Remove from Favorites"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <!-- Display Favorites Button (added here) -->
+        <Button
+            android:id="@+id/displayFavoritesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:backgroundTint="#008080"
+            android:elevation="2dp"
+            android:padding="12dp"
+            android:text="Display Favorites"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+    </LinearLayout>
 </RelativeLayout>
+

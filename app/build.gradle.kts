@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    kotlin("kapt")
 }
 
 android {
@@ -50,7 +51,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -66,11 +66,13 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-
-    // Gson converter for parsing JSON data
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    // Optional: OkHttp logging interceptor for debugging
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("androidx.room:room-runtime:2.5.0")
+    kapt("androidx.room:room-compiler:2.5.0")
+
+
 }
