@@ -7,29 +7,32 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.midterm_proj.data.AirQualityResponse
 import com.example.midterm_proj.data.FavoriteCity
 import com.example.midterm_proj.data.WeatherResponse
+import com.example.midterm_proj.databinding.ActivityCitySearchBinding
 import com.example.midterm_proj.network.RetrofitInstance
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CitySearchActivity : ComponentActivity() {
 
+    private lateinit var binding: ActivityCitySearchBinding
     private lateinit var favoritesManager: FavoritesManager
     private var searchedCityName: String? = null
     private var searchedCityTemperature: Double? = null
 
-    private val apiKey = "5fdfe74706adf27b7c1c90d432144d10" // Replace with your actual API key
+    private val apiKey = "5fdfe74706adf27b7c1c90d432144d10"
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     companion object {
@@ -38,66 +41,51 @@ class CitySearchActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_city_search)
+        binding = ActivityCitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         favoritesManager = FavoritesManager(this)
 
-        // Add Favorite Button
-        val addButton = findViewById<Button>(R.id.addFavoriteButton)
-        addButton.setOnClickListener {
+
+        //add fav button
+        binding.addFavoriteButton.setOnClickListener {
+            Log.d("AddFavorite", "City: $searchedCityName, Temp: $searchedCityTemperature")
+
             searchedCityName?.let { cityName ->
                 searchedCityTemperature?.let { temperature ->
                     val city = FavoriteCity(cityName, temperature)
                     favoritesManager.addFavoriteCity(city)
                     Toast.makeText(this, "$cityName added to favorites!", Toast.LENGTH_SHORT).show()
+                } ?: run {
+                    Toast.makeText(this, "Temperature not available", Toast.LENGTH_SHORT).show()
                 }
+            } ?: run {
+                Toast.makeText(this, "City name not available", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Display Favorite Button
-        val displayFavoritesButton = findViewById<Button>(R.id.displayFavoritesButton)
-        val favoritesTextView = findViewById<TextView>(R.id.favoriteCitiesText)
-
-        displayFavoritesButton.setOnClickListener {
-            val favoriteCities = favoritesManager.getFavoriteCities()
-            val displayText = if (favoriteCities.isNotEmpty()) {
-                favoriteCities.joinToString(separator = "\n") { "${it.cityName}: ${it.temperature}°C" }
-            } else {
-                "No favorites yet"
-            }
-            favoritesTextView.text = displayText
-        }
-
-        // Remove Favorite Button (Modified)
-        val removeButton = findViewById<Button>(R.id.removeFavoriteButton)
-        removeButton.setOnClickListener {
-            searchedCityName?.let { cityName ->
-                favoritesManager.removeFavoriteCity(cityName) // Remove the selected city
-                Toast.makeText(this, "$cityName removed from favorites!", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        // Initialize the FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // Check location permissions and fetch current location weather
+
         if (checkLocationPermission()) {
-            fetchCurrentLocationWeather()  // Automatically fetch current location weather
+            fetchCurrentLocationWeather()
         } else {
             requestLocationPermission()
         }
 
-        // Initialize UI elements
-        val searchBox = findViewById<EditText>(R.id.citySearchBox)
-        val searchButton = findViewById<Button>(R.id.searchButton)
 
-        // Set click listener on the search button
-        searchButton.setOnClickListener {
-            val cityName = searchBox.text.toString().trim()
+        binding.searchButton.setOnClickListener {
+            val cityName = binding.citySearchBox.text.toString().trim()
             if (cityName.isNotEmpty()) {
                 fetchWeatherData(cityName)
             } else {
                 Toast.makeText(this, "Enter a city name", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.openFavoritesButton.setOnClickListener {
+            val intent = Intent(this, FavoritesActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -143,7 +131,6 @@ class CitySearchActivity : ComponentActivity() {
     }
 
     private fun fetchCurrentLocationWeather() {
-        // Check if location permissions are granted
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED &&
@@ -151,16 +138,13 @@ class CitySearchActivity : ComponentActivity() {
                 this, Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // Permissions are not granted; should not reach here
             return
         }
 
-        // Retrieve the last known location
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             location?.let {
                 val lat = it.latitude
                 val lon = it.longitude
-                // Fetch weather data based on the current location coordinates
                 fetchWeatherDataForLocation(lat, lon)
             } ?: run {
                 Toast.makeText(this, "Failed to retrieve location", Toast.LENGTH_SHORT).show()
@@ -168,21 +152,16 @@ class CitySearchActivity : ComponentActivity() {
         }
     }
 
-
-
     private fun updateWeatherUI(weather: WeatherResponse) {
-        findViewById<TextView>(R.id.cityName).text = weather.name
-        findViewById<TextView>(R.id.temperature).text = "${weather.main.temp}°C"
-        findViewById<TextView>(R.id.weatherDescription).text = weather.weather[0].description.replaceFirstChar { it.uppercase() }
+        binding.cityName.text = weather.name
+        binding.temperature.text = "${weather.main.temp}°C"
+        binding.weatherDescription.text = weather.weather[0].description.replaceFirstChar { it.uppercase() }
 
         // Optional additional details
-        findViewById<TextView>(R.id.humidityValue)?.text = "${weather.main.humidity}%"
-        findViewById<TextView>(R.id.windSpeedValue)?.text = "${weather.wind.speed} km/h"
-        findViewById<TextView>(R.id.pressureValue)?.text = "${weather.main.pressure} hPa"
+        binding.humidityValue.text = "${weather.main.humidity}%"
+        binding.windSpeedValue.text = "${weather.wind.speed} km/h"
+        binding.pressureValue.text = "${weather.main.pressure} hPa"
     }
-
-
-
 
     private fun fetchWeatherDataForLocation(lat: Double, lon: Double) {
         RetrofitInstance.api.getWeatherByCoordinates(lat, lon, apiKey).enqueue(object : Callback<WeatherResponse> {
@@ -190,15 +169,15 @@ class CitySearchActivity : ComponentActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     val weather = response.body()!!
 
-                    // Update UI with current location weather
-                    findViewById<TextView>(R.id.currentCityName).text = "City: ${weather.name}"
-                    findViewById<TextView>(R.id.currentTemperature).text = "Temperature: ${weather.main.temp}°C"
-                    findViewById<TextView>(R.id.currentWeatherDescription).text = "Description: ${weather.weather[0].description}"
-
-                    // Update the title to display the city's name
-                    findViewById<TextView>(R.id.currentLocationTitle).text = "${weather.name} Weather"
+                    // Update UI with weather data
+                    binding.currentCityName.text = "City: ${weather.name}"
+                    binding.currentTemperature.text = "Temperature: ${weather.main.temp}°C"
+                    binding.currentWeatherDescription.text = "Description: ${weather.weather[0].description}"
+                    binding.currentLocationTitle.text = "${weather.name} Weather"
 
                     Log.d("WeatherAPI", "Current Location Weather: ${weather.name}, Temp: ${weather.main.temp}")
+
+                    fetchAirQuality(lat, lon)
                 } else {
                     Toast.makeText(this@CitySearchActivity, "Error fetching weather data", Toast.LENGTH_SHORT).show()
                 }
@@ -212,29 +191,91 @@ class CitySearchActivity : ComponentActivity() {
 
 
     private fun fetchWeatherData(city: String) {
-            RetrofitInstance.api.getWeather(city, apiKey).enqueue(object : Callback<WeatherResponse> {
-                override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
-                    if (response.isSuccessful && response.body() != null) {
-                        val weather = response.body()!!
-                        searchedCityName = weather.name
-                        searchedCityTemperature = weather.main.temp
+        // Disable buttons while fetching data to prevent multiple clicks
+        disableButtons()
 
-                        // Update UI with weather data
-                        updateWeatherUI(weather)
-                    } else {
-                        Toast.makeText(this@CitySearchActivity, "City not found", Toast.LENGTH_SHORT).show()
-                    }
-                }
+        RetrofitInstance.api.getWeather(city, apiKey).enqueue(object : Callback<WeatherResponse> {
+            override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
+                // Always re-enable buttons regardless of success or failure
+                enableButtons()
 
-                override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-                    Toast.makeText(this@CitySearchActivity, "Error fetching data", Toast.LENGTH_SHORT).show()
+                if (response.isSuccessful && response.body() != null) {
+                    val weather = response.body()!!
+
+                    // Update the UI with weather data
+                    binding.cityName.text = weather.name
+                    binding.temperature.text = "${weather.main.temp}°C"
+                    binding.weatherDescription.text = weather.weather[0].description.replaceFirstChar { it.uppercase() }
+                    binding.humidityValue.text = "${weather.main.humidity}%"
+                    binding.windSpeedValue.text = "${weather.wind.speed} km/h"
+                    binding.pressureValue.text = "${weather.main.pressure} hPa"
+
+                    // Assign data for Add to Favorites functionality
+                    searchedCityName = weather.name
+                    searchedCityTemperature = weather.main.temp
+
+                    Log.d("WeatherAPI", "Searched City Weather: ${weather.name}, Temp: ${weather.main.temp}")
+
+                    // Fetch AQI data for the location
+                    fetchAirQuality(weather.coord.lat, weather.coord.lon)
+                } else {
+                    Toast.makeText(this@CitySearchActivity, "City not found", Toast.LENGTH_SHORT).show()
+                    Log.e("WeatherAPI", "Response error: ${response.errorBody()?.string()}")
                 }
+            }
+
+            override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                // Always re-enable buttons regardless of success or failure
+                enableButtons()
+
+                Toast.makeText(this@CitySearchActivity, "Error fetching weather data", Toast.LENGTH_SHORT).show()
+                Log.e("WeatherAPI", "API call failure: ${t.message}")
+            }
         })
     }
 
+    // Disable buttons to prevent multiple clicks
+    private fun disableButtons() {
+        binding.searchButton.isEnabled = false
+        binding.addFavoriteButton.isEnabled = false
+        // Add other buttons if needed
+    }
+
+    // Re-enable buttons after the API call finishes
+    private fun enableButtons() {
+        binding.searchButton.isEnabled = true
+        binding.addFavoriteButton.isEnabled = true
+        // Add other buttons if needed
+    }
 
 
+    private fun fetchAirQuality(lat: Double, lon: Double) {
+        RetrofitInstance.api.getAirQuality(lat, lon, apiKey).enqueue(object : Callback<AirQualityResponse> {
+            override fun onResponse(call: Call<AirQualityResponse>, response: Response<AirQualityResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val aqi = response.body()!!.list[0].main.aqi
+                    updateAQIUI(aqi)
+                } else {
+                    Toast.makeText(this@CitySearchActivity, "Error fetching AQI data", Toast.LENGTH_SHORT).show()
+                }
+            }
 
+            override fun onFailure(call: Call<AirQualityResponse>, t: Throwable) {
+                Toast.makeText(this@CitySearchActivity, "Failed to fetch AQI data", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 
+    private fun updateAQIUI(aqi: Int) {
+        val aqiDescription = when (aqi) {
+            1 -> "Good"
+            2 -> "Fair"
+            3 -> "Moderate"
+            4 -> "Poor"
+            5 -> "Very Poor"
+            else -> "Unknown"
+        }
+        findViewById<TextView>(R.id.aqiTextView).text = "Air Quality: $aqiDescription"
+    }
 
 }

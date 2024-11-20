@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#1E1E1E">
@@ -81,8 +82,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_humidity"
-                android:tint="#FFC107"
-                android:contentDescription="@string/humidity_icon_desc" />
+                android:contentDescription="@string/humidity_icon_desc"
+                app:tint="#FFC107" />
 
             <TextView
                 android:id="@+id/humidityLabel"
@@ -116,8 +117,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_wind"
-                android:tint="#FFC107"
-                android:contentDescription="@string/wind_icon_desc" />
+                android:contentDescription="@string/wind_icon_desc"
+                app:tint="#FFC107" />
 
             <TextView
                 android:id="@+id/windSpeedLabel"
@@ -151,8 +152,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_pressure"
-                android:tint="#FFC107"
-                android:contentDescription="@string/pressure_icon_desc" />
+                android:contentDescription="@string/pressure_icon_desc"
+                app:tint="#FFC107" />
 
             <TextView
                 android:id="@+id/pressureLabel"

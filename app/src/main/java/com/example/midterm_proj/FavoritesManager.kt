@@ -5,20 +5,27 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class FavoritesManager(context: Context) {
+
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("favorites_prefs", Context.MODE_PRIVATE)
     private val gson = Gson()
 
-    // Save a favorite city to SharedPreferences
+    // Add a favorite city to SharedPreferences
     fun addFavoriteCity(city: FavoriteCity) {
         val cities = getFavoriteCities().toMutableList()  // Get existing cities
-        cities.add(city)  // Add the new city
-        saveCitiesList(cities)  // Save the updated list back to SharedPreferences
+
+        // Check if the city already exists to prevent duplicates
+        if (!cities.any { it.cityName == city.cityName }) {
+            cities.add(city)  // Add the new city
+            saveCitiesList(cities)  // Save the updated list back to SharedPreferences
+        }
     }
 
     // Get the list of favorite cities from SharedPreferences
     fun getFavoriteCities(): List<FavoriteCity> {
-        val json = sharedPreferences.getString("favorite_cities", null) ?: return emptyList()
+        val json = sharedPreferences.getString("favorite_cities", null)
+        if (json.isNullOrEmpty()) return emptyList()  // Return an empty list if no data exists
+
         val type = object : TypeToken<List<FavoriteCity>>() {}.type
         return gson.fromJson(json, type)
     }
@@ -33,5 +40,10 @@ class FavoritesManager(context: Context) {
     private fun saveCitiesList(cities: List<FavoriteCity>) {
         val json = gson.toJson(cities)  // Convert the list to a JSON string
         sharedPreferences.edit().putString("favorite_cities", json).apply()  // Save it to SharedPreferences
+    }
+
+    // Check if a city is already a favorite
+    fun isCityFavorite(cityName: String): Boolean {
+        return getFavoriteCities().any { it.cityName == cityName }
     }
 }
